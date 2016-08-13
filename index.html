@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>socket.io chat</title>
+
+	<!-- Here we include bootstrap. This will be made available to all of the generated HTML/JS that React generates-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<style type="text/css">
+		#message {
+			height: 200px;
+			overflow: auto;
+			background-color: #999;
+			color: white;
+		}
+	</style>
+<!-- Latest compiled and minified js(jquery) -->
+	<script   src="https://code.jquery.com/jquery-3.0.0.min.js"   integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="   crossorigin="anonymous"></script>
+</head>
+<body>
+	
+<div class="container">
+
+	<div class="row">
+		<div class="col-sm-12">
+			<div id="message">
+				
+			</div>
+		</div>
+		
+	</div>
+
+
+	<div class="row">
+		<div class="col-sm-12">
+		<form action="">
+			<input type="text" id="m" name="chat" class="form-control"><button id="theForm" class="btn btn-default">Send</button>
+		</form>		
+		</div>
+	</div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect();
+  $('#theForm').on('click', function(){
+  	socket.emit('chat message', $('#m').val());
+  	$('#m').val('');
+  	return false;
+  })
+  socket.on('message', function(msg){
+  	var ptag = $('<p>').html(msg);
+  	$('#message').append(ptag);
+  	
+  })
+</script>
+</body>
+</html>
