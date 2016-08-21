@@ -1,5 +1,14 @@
+
+// require express sessions
+session = require('express-session');
 // init express server
 var app = require('express')();
+// adds sessions to app
+app.use(session({
+    secret: 'no secret',
+    resave: true,
+    saveUninitialized: true
+}));
 // inits http to the server
 var http = require('http').Server(app);
 // requires socket.io and syncs it with http
@@ -27,6 +36,9 @@ io.on('connection', function(socket){
 });
 
 
+require('./control.js')(app);
+
 http.listen(3000, function(){
   console.log('listening on :3000');
 });
+
