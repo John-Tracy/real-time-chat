@@ -9,13 +9,14 @@ db.on('error', function(err) {
   console.log('Database Error:', err);
 });
 
+var path = require('path');
 
 // require express server
 module.exports = function(app){
 
 app.get('/login/:name', function(req, res){
 	db.user.find({"name": req.params.name}, function(err, docs){
-		res.send(docs);
+		res.sendFile(path.join(__dirname + '/index.html'));
 	});
 })
 
