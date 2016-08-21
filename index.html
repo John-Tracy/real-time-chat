@@ -39,19 +39,57 @@
 		</div>
 	</div>
 </div>
+	<div class="row">
+		<div class="col-md-12">
+			<input type="text" id="log" class="form-control">
+			<button id="login" class="btn btn-default">login</button>
+		</div>
+	</div>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  var socket = io.connect();
+ var socket = io.connect();
+var currentUrl = window.location.origin;
+
+  $('#login').on('click', function(){
+  	var userName = $('#log').val().trim();
+  	console.log(userName);
+  	$.ajax({
+  		url: currentUrl + '/login',
+  		method: 'POST',
+  		data: {
+  			user: userName
+  		},
+  		success: function(response){
+  			if(response.message == 'success'){
+  				socket.userName = response.name;
+  			}
+  			else{
+  				console.log('didnt work');
+  			}
+  		}
+  	});
+  });
+
+
   $('#theForm').on('click', function(){
-  	socket.emit('chat message', $('#m').val());
+
+  	socket.emit('chat message', $('#m').val(), socket.userName);
+
   	$('#m').val('');
   	return false;
   })
-  socket.on('message', function(msg){
-  	var ptag = $('<p>').html(msg);
+  if(socket != undefined){
+  socket.on('message', function(msg, id){
+  	var ptag = $('<p>').html(id + ":  " + msg);
   	$('#message').append(ptag);
   	
   })
+}
+  // socket.on('con', function(user){
+  // 	currentUser = user;
+  // 	var mes = $('<p>').html(user + ' connected');
+  // 	$('#message').append(mes);
+  // })
 </script>
 </body>
 </html>
